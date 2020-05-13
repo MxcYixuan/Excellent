@@ -16,7 +16,6 @@ public:
             swap(num[j], num[id]);
     }
 
-
 	void push (int val) {
         num.push_back(val);
 		if (num.size() > 1) {
@@ -35,7 +34,7 @@ public:
 		if (num.size() == 1) {
 			num.pop_back();
 		} else {
-			swap(num[0], num[len - 1]);
+	        swap(num[0], num[len - 1]);
             num.pop_back();
             if (num.size() > 1) {
                 for (int id = 0; id <= num.size() / 2 - 1; id++) {
@@ -51,12 +50,9 @@ public:
 int main()
 {
 	vector<vector<int>> vec = { {1,4,3}, {1,4,7} , {1,3,5} , {2,9,4} , {2,5,8} , {3,9,6} };
-
 	sort(vec.begin(), vec.end());
-
 	for(auto p : vec)
 		cout<<p[0]<<' '<<p[1]<<' '<<p[2]<<endl;
-
     priority_deque pd;
     pd.push(5);
     pd.push(1);
@@ -64,15 +60,11 @@ int main()
 	pd.push(2);
 	pd.push(9);
 	pd.push(0);
-
-
 	cout << "size: " << pd.num.size() << endl;
-
 	cout << "--------------" << endl;
     //pd.push(-1);
     //pd.push(10);
     //pd.push(2);
-
     //cout << pd.pop() << endl;
     cout << pd.pop() << endl;
     cout << pd.pop() << endl;
@@ -80,7 +72,5 @@ int main()
 	cout << pd.pop() << endl;
 	cout << pd.pop() << endl;
 	cout << pd.pop() << endl;
-
-
 	return 0;
 }
