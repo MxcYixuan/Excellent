@@ -4,6 +4,8 @@
 #include <vector>
 using namespace std;
 
+
+
 class priority_deque {
 public:
 	vector<int> num;
