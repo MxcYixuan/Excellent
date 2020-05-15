@@ -1,3 +1,8 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
 int partition_nums(vector<int> &nums, int left, int right) {
     int base = nums[left];
     int i = left ;
@@ -20,4 +25,10 @@ void quickSort(vector<int> &nums, int left, int right) {
     quickSort(nums, left, mid - 1);
     quickSort(nums, mid + 1, right);
 
-}
+};
+
+void main () {
+
+    cout << "hi clion" << endl;
+
+};
