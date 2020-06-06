@@ -1,3 +1,26 @@
+
+/*两数之和
+给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+
+你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
+*/
+
+vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> umap;
+        vector<int> res;
+        for(int i = 0; i != nums.size(); i++) {
+            umap[nums[i]] = i;
+        }
+        for (int i = 0; i != nums.size(); i++) {
+            if (umap.find(target - nums[i]) != umap.end() 
+                && umap[target - nums[i]] != i) {
+                return {i, umap[target - nums[i]]};
+            }
+        }
+        return res;
+    }
+
+
 /*
 三数之和(自己首先版本)
 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
