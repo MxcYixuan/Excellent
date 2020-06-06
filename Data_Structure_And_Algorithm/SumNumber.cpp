@@ -77,6 +77,7 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 答案中不可以包含重复的四元组。
 */
 //双指针解法
+
 vector<vector<int>> fourSum(vector<int>& nums, int target) {
         sort(nums.begin(),nums.end());
         vector<vector<int>> res;
@@ -89,7 +90,7 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
         		if(id2 > id1 + 1 && nums[id2] == nums[id2 - 1]) continue;   //确保nums[b] 改变了
         		left = id2 + 1,right = size - 1;
         		while(left < right){
-                    int sumNum = nums[id1]+nums[id2]+nums[left]+nums[right];
+                        int sumNum = nums[id1]+nums[id2]+nums[left]+nums[right];
         			if(sumNum < target)
         			    left++;
         			else if(sumNum > target)
@@ -108,3 +109,6 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
 		}
 		return res;
     }
+
+
+
