@@ -5,6 +5,7 @@
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
 */
 
+//两边hash
 vector<int> twoSum(vector<int>& nums, int target) {
         unordered_map<int, int> umap;
         vector<int> res;
@@ -20,6 +21,17 @@ vector<int> twoSum(vector<int>& nums, int target) {
         return res;
     }
 
+//一遍hash
+vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> umap;
+        vector<int> res;
+        for (int i = 0; i != nums.size(); i++) {
+            if (umap.find(target - nums[i]) != umap.end() )
+                return {i, umap[target - nums[i]]};
+            umap[nums[i]] = i;
+        }
+        return res;
+    }
 
 /*
 三数之和(自己首先版本)
