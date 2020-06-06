@@ -68,3 +68,43 @@ vector<vector<int>> threeSum(vector<int>& nums) {
         }
         return res;
     }
+
+/* 习题18 四数之和
+给定一个包含 n 个整数的数组 nums 和一个目标值 target，判断 nums 中是否存在四个元素 a，b，c 和 d 18 ，
+使得 a + b + c + d 的值与 target 相等？找出所有满足条件且不重复的四元组。
+
+注意：
+答案中不可以包含重复的四元组。
+*/
+//双指针解法
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> res;
+        if(nums.size()<4) return res;
+        int id1, id2, left, right;
+        int size = nums.size();
+        for(id1 = 0; id1 <= size - 4; id1++){
+        	if(id1 > 0 && nums[id1] == nums[id1 - 1]) continue;      //确保nums[a] 改变了
+        	for(id2 = id1 + 1; id2 <= size - 3; id2++){
+        		if(id2 > id1 + 1 && nums[id2] == nums[id2 - 1]) continue;   //确保nums[b] 改变了
+        		left = id2 + 1,right = size - 1;
+        		while(left < right){
+                    int sumNum = nums[id1]+nums[id2]+nums[left]+nums[right];
+        			if(sumNum < target)
+        			    left++;
+        			else if(sumNum > target)
+        			    right--;
+        			else{
+        				res.push_back({nums[id1],nums[id2],nums[left],nums[right]});
+        				while(left < right && nums[left + 1]==nums[left])      //确保nums[c] 改变了
+        				    left++;
+        				while(left < right && nums[right - 1]==nums[right])      //确保nums[d] 改变了
+        				    right--;
+        				left++;
+        				right--;
+					}
+				}
+			}
+		}
+		return res;
+    }
