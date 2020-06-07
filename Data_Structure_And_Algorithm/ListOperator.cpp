@@ -60,6 +60,26 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
     }
 }
 
+//22. 括号生成
+/*
+ * 数字 n 代表生成括号的对数，请你设计一个函数，
+ * 用于能够生成所有可能的并且 有效的 括号组合。
+ */
 
+vector<string> generateParenthesis(int n) {
+    vector<string> res;
+    dfs(res, "", n, 0, 0);
+    return res;
+}
 
+void dfs(vector<string> & res, string  str,
+         int n, int left,int right) {
+    if (left > n || right > n || right > left) return;
+    if (left == n && right == n) {
+        res.push_back(str);
+        return;
+    }
+    dfs(res, str + "(", n, left + 1, right);
+    dfs(res, str + ")", n, left, right + 1);
+}
 
