@@ -60,3 +60,73 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
     }
 }
 
+
+//23. 合并K个排序链表
+//方法1： 思想：按照两两合并链表的思想，进行合并
+//时间复杂度O(k平方N),空间复杂度O(1)
+ListNode* mergeTwoLists(ListNode *a, ListNode *b) {
+    if (!a) return b;
+    if (!b) return a;
+    ListNode head;
+    ListNode *tail = &head, *aPtr = a, *bPtr = b;
+    while (aPtr && bPtr) {
+        if (aPtr->val < bPtr->val) {
+            tail->next = aPtr;
+            aPtr = aPtr->next;
+        } else {
+            tail->next = bPtr;
+            bPtr = bPtr->next;
+        }
+        tail = tail->next;
+    }
+    tail->next= (aPtr ? aPtr : bPtr);
+
+    return head.next;
+}
+
+ListNode* mergeKLists(vector<ListNode*> &lists) {
+    ListNode* ans = nullptr;
+    for (int i = 0; i != lists.size(); i++) {
+        ans = mergeTwoLists(ans, lists[i]);
+    }
+    return ans;
+}
+
+
+/*方法二：分治合并
+思路
+将 k 个链表配对并将同一对中的链表合并；
+
+考虑优化方法一，用分治的方法进行合并。
+重复这一过程，直到我们得到了最终的有序链表。
+*/
+
+ListNode* mergeTwoLists(ListNode *a, ListNode *b) {
+    if (!a) return b;
+    if (!b) return a;
+    ListNode head;
+    ListNode *tail = &head, *aPtr = a, *bPtr = b;
+    while (aPtr && bPtr) {
+        if (aPtr->val < bPtr->val) {
+            tail->next = aPtr;
+            aPtr = aPtr->next;
+        } else {
+            tail->next = bPtr;
+            bPtr = bPtr->next;
+        }
+        tail = tail->next;
+    }
+    tail->next= (aPtr ? aPtr : bPtr);
+    return head.next;
+}
+
+ListNode* merge(vector<ListNode*>&lists, int left, int right) {
+    if (left == right) return lists[left];
+    if (left > right) return nullptr;
+    int mid = left + ((right - left) >> 1);
+    return mergeTwoLists(merge(lists, left, mid), merge(lists, mid+1, right));
+}
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+    return merge(lists, 0, lists.size() - 1);
+}
+
