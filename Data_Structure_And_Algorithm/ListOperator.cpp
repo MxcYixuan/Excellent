@@ -156,5 +156,30 @@ ListNode* swapPairs(ListNode* head) {
     return root->next;
 }
 
+ListNode* swapPairs(ListNode* head) {
+    // 1. 对特殊情况提前返回
+    if (head == nullptr || head->next == nullptr) {
+        return head;
+    }
+    // 2. 创建一个临时节点，使它的next指向整个链表的head
+    ListNode headNext = ListNode(-1);
+    headNext.next = head;
+    // 3. 确定双指针指向的两个待交换元素非空
+    ListNode* prev = &headNext;
+    while (prev->next != nullptr && prev->next->next != nullptr) {
+        ListNode* first = prev->next;
+        ListNode* second = prev->next->next;
+        // 4. 实现交换空间外部界面的处理
+        prev->next = second;
+        first->next = second->next;
+        // 5. 实现交换空间内部的处理
+        second->next = first;
+        // 6. 向前移动两格
+        prev = prev->next->next;
+    }
+    // 7. 临时节点默默的一直帮我们保存着head，这时终于用到了
+    return headNext.next;
+}
+
 
 
