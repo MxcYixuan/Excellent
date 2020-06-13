@@ -137,6 +137,7 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 示例:
 给定 1->2->3->4, 你应该返回 2->1->4->3.
 */
+//方法1，自己写的
 ListNode* swapPairs(ListNode* head) {    
     if(!head) return nullptr;
     if(!head->next) return head;
@@ -155,7 +156,7 @@ ListNode* swapPairs(ListNode* head) {
     }
     return root->next;
 }
-
+//方法2，别人的解题
 ListNode* swapPairs(ListNode* head) {
     // 1. 对特殊情况提前返回
     if (head == nullptr || head->next == nullptr) {
