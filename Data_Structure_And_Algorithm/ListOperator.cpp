@@ -182,5 +182,42 @@ ListNode* swapPairs(ListNode* head) {
     return headNext.next;
 }
 
+//25. K 个一组翻转链表
+//一个难度题，需要细看
+//别人题解
+pair<ListNode*, ListNode*> myReverse(ListNode* head, ListNode* tail) {
+    ListNode* pre = tail->next;
+    ListNode* curr = head;
+    while(pre != tail) {
+        ListNode* next = curr->next;
+        curr->next = pre;
+        pre = curr;
+        curr = next;
+    }
+    return {tail, head};
+}
+ListNode* reverseKGroup(ListNode* head, int k) {
+    ListNode* dummy = new ListNode(0);
+    dummy->next = head;
+    ListNode* pre = dummy;
+    while(head) {
+        ListNode* tail = pre;
+        for (int i = 0; i < k; i++) {
+            tail = tail->next;
+            if(!tail) return dummy->next;
+        }
+        ListNode* next = tail->next;
+        pair<ListNode*, ListNode*> result = myReverse(head, tail);
+        head = result.first;
+        tail = result.second;
+        pre->next = head;
+        tail->next = next;
+        pre = tail;
+        head = tail->next;
+    }
+    return dummy->next;
+}
+
+
 
 
