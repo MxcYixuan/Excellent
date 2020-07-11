@@ -269,3 +269,71 @@ bool searchMatrix(vector<vector<int>>& matrix, int target) {
     return false;
 }
 
+//33. 搜索旋转排序数组
+/*假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+你可以假设数组中不存在重复的元素。
+你的算法时间复杂度必须是 O(log n) 级别。
+*/
+int search(vector<int>& nums, int target) {
+    int n = nums.size();
+    if (0 == n) return -1;
+    int left = 0, right = n - 1;
+    while (left <= right) {
+        int mid = left + ((right - left) >> 1);
+        if (nums[mid] == target) return mid;
+        //这里 nums[left]和nums[right]相等，和小于情况一致
+        if (nums[left] <= nums[mid]) {
+            if (nums[left] <= target && target < nums[mid]) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        } else {
+            if (nums[mid] <= target && target <= nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+    }
+    return -1;
+}
+
+//81. 搜索旋转排序数组 II
+/*
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+( 例如，数组 [0,0,1,2,2,5,6] 可能变为 [2,5,6,0,0,1,2] )。
+编写一个函数来判断给定的目标值是否存在于数组中。若存在返回 true，否则返回 false。
+*/
+bool search(vector<int>& nums, int target) {
+    int len = nums.size();
+    if(0 == len) return false;
+    int left = 0, right = len - 1;
+    while(left <= right) {
+        int mid = left + ((right - left) >> 1);
+        if (nums[mid] == target) {
+            return true;
+        } else if(nums[mid] > nums[left]) {
+            if (nums[left] <= target && target <= nums[mid]) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        } else if (nums[mid] < nums[left]) {
+            if (nums[mid] <= target && target <= nums[right]) {
+                left = mid + 1;
+            }else {
+                right = mid - 1;
+            }
+        } else if (nums[mid] == nums[left]) {
+            left++;
+        }
+    }
+    return false;
+}
+
+
+
+
