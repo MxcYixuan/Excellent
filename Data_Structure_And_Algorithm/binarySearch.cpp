@@ -210,3 +210,36 @@ double findMedianSortedArrays3(vector<int>& nums1, vector<int>& nums2) {
     return (m + n) % 2 == 0 ? (median1 + median2) / 2.0 : median1;
 }
 
+
+//69. x 的平方根
+/*实现 int sqrt(int x) 函数。
+计算并返回 x 的平方根，其中 x 是非负整数。
+由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+*/
+int mySqrt(int x) {
+    int left = 0, right = x;
+    int res = 0.0;
+    while(left <= right) {
+        int mid = left + ((right - left) >> 1);
+        if ((long long) mid * mid > x) {
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+            res = mid;
+        }
+    }
+    return res;
+}
+//50. Pow(x, n)
+//实现 pow(x, n) ，即计算 x 的 n 次幂函数。
+double quickMul(double x, int n) {
+    if (n == 0)
+        return 1;
+    double y = quickMul(x, n / 2);
+    return n % 2 == 0 ? y * y : y * y * x;
+}
+double myPow(double x, int n) {
+    long long N = n;
+
+    return N >= 0 ? quickMul(x, N) : 1 / quickMul(x, -N);
+}
