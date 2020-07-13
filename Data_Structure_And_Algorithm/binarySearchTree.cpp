@@ -46,3 +46,21 @@ TreeNode* rebuildTreeFromPostOrder2(vector<int> &vec, int left, int right) {
     root->right = rebuildTreeFromPostOrder(vec, id, right - 1);
     return root;
 }
+
+//124. 二叉树中的最大路径和
+/*给定一个非空二叉树，返回其最大路径和。
+本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径至少包含一个节点，且不一定经过根节点。
+*/
+int maxPathSum(TreeNode* root) {
+    int val = INT_MIN;
+    maxVal(root, val);
+    return val;
+}
+int maxVal(TreeNode* root, int &val) {
+    if (root == nullptr) return 0;
+    int left = max(0, maxVal(root->left, val));
+    int right = max(0, maxVal(root->right, val));
+    val = max(val, (left + right + root->val));
+    return max(left, right) + root->val;
+}
+
