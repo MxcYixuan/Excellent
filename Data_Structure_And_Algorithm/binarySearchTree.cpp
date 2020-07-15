@@ -64,3 +64,27 @@ int maxVal(TreeNode* root, int &val) {
     return max(left, right) + root->val;
 }
 
+//96. 不同的二叉搜索树
+/*给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树.*/
+vector<TreeNode*> generateTrees(int n) {
+    if(n == 0) return {};
+    return helper(1, n);
+}
+vector<TreeNode*> helper(int start, int end) {
+    if (start > end) return {nullptr};
+    vector<TreeNode*> res;
+    for (int i = start; i <= end; i++) {
+        vector<TreeNode*> left_trees = helper(start, i - 1);
+        vector<TreeNode*> right_trees = helper(i + 1, end);
+        for (auto l : left_trees) {
+            for (auto r : right_trees) {
+                TreeNode* node = new TreeNode(i);
+                node->left = l;
+                node->right = r;
+                res.push_back(node);
+            }
+        }
+
+    }
+    return res;
+}
