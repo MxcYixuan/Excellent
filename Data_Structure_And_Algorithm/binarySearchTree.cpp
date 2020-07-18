@@ -88,3 +88,52 @@ vector<TreeNode*> helper(int start, int end) {
     }
     return res;
 }
+
+//98. 验证二叉搜索树
+//方法1：中序遍历放入栈中，再循环迭代
+vector<int> t;
+bool isValidBST3(TreeNode* root) {
+    if(root == NULL) return true;
+    //vector<int> t;
+    dfs(root);
+    for(int i =0;i < t.size() - 1;i++){
+        if(t[i + 1] <= t[i]) return false;
+    }
+    return true;
+
+}
+void dfs(TreeNode* root){
+    if(root -> left) dfs(root->left);
+    t.push_back(root -> val);
+    if(root -> right) dfs(root->right);
+}
+//方法2：递归调用
+bool helper(TreeNode* root, long long lower, long long upper) {
+    if (root == nullptr) return true;
+    if (root->val <= lower || root->val >= upper)
+        return false;
+    return helper(root->left, lower, root->val) && helper(root->right, root->val, upper);
+}
+bool isValidBST2(TreeNode* root) {
+
+    return helper(root, LONG_MIN, LONG_MAX);
+}
+//方法3：中序判断，使用栈
+bool isValidBST(TreeNode* root) {
+    stack<TreeNode*> s;
+    long long value = (long long)INT_MIN - 1;
+    while(!s.empty() || root != nullptr) {
+        while(root != nullptr) {
+            s.push(root);
+            root = root->left;
+        }
+        root = s.top();
+        s.pop();
+        if (root->val <= value) return false;
+        value = root->val;
+        root = root->right;
+    }
+    return true;
+}
+
+
