@@ -136,4 +136,51 @@ bool isValidBST(TreeNode* root) {
     return true;
 }
 
+//102. 二叉树的层序遍历
+//给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）
+vector<vector<int>> levelOrder(TreeNode* root) {
+    vector<vector<int>> res;
+    if(!root) return res;
+    queue<TreeNode*> que;
+    que.push(root);
+    while(!que.empty()) {
+        int len = que.size();
+        vector<int> tmp;
+        for (int i = 0; i != len; i++) {
+            TreeNode* node = que.front();
+            que.pop();
+            tmp.push_back(node->val);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        res.push_back(tmp);
+    }
+    return res;
+}
+//103. 二叉树的锯齿形层次遍历
+//给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+    //BFS
+    vector<vector<int>>res;
+    if(!root)return res;
+    queue<TreeNode*>q;
+    q.push(root);
+    int x=0;  //判断当前行奇偶
+    while(!q.empty()){
+        int l=q.size();
+        vector<int>tmp;
+        for(int i=0;i<l;i++){
+            TreeNode* t=q.front();
+            q.pop();
+            tmp.push_back(t->val);
+            if(t->left)q.push(t->left);
+            if(t->right)q.push(t->right);
+        }
+        x++;
+        if(x%2==0)reverse(tmp.begin(),tmp.end());
+        res.push_back(tmp);
+    }
+    return res;
+}
+
 
