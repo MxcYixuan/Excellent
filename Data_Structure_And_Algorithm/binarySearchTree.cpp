@@ -183,4 +183,56 @@ vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
     return res;
 }
 
+//105. 从前序与中序遍历序列构造二叉树
+//根据一棵树的前序遍历与中序遍历构造二叉树。
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    int inSize = inorder.size();
+    int preSize = preorder.size();
+    if (inSize != preSize) return nullptr;
 
+    unordered_map<int, int> umap;
+    for (int i = 0; i != inorder.size(); i++) {
+        umap[inorder[i]] = i;
+    }
+    TreeNode* root = buildTree(preorder, inorder, umap, 0, preSize-1, 0, inSize-1);
+    return root;
+}
+
+TreeNode* buildTree(vector<int> &preorder, vector<int> &inorder, unordered_map<int, int>&umap,
+                    int preLeft, int preRight, int inLeft, int inRight) {
+    if (preLeft > preRight || inLeft > inRight)
+        return nullptr;
+    int val = preorder[preLeft];
+    int index = umap[val];
+    TreeNode* node = new TreeNode(val);
+    node->left = buildTree(preorder, inorder, umap, preLeft+1, preLeft+index-inLeft, inLeft, index - 1);
+    node->right = buildTree(preorder, inorder, umap, preLeft+index-inLeft+1,preRight, index+1, inRight);
+    return node;
+}
+
+//106. 从中序与后序遍历序列构造二叉树
+//根据一棵树的中序遍历与后序遍历构造二叉树。
+//你可以假设树中没有重复的元素。
+TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+
+    if (inorder.size() == 0 || postorder.size() == 0) return nullptr;
+    unordered_map<int, int> umap;
+    for (int i = 0; i != inorder.size(); i++) {
+        umap[inorder[i]] = i;
+    }
+    TreeNode* root = buildTree(inorder, postorder, umap, 0, inorder.size()-1, 0, inorder.size()-1);
+    return root;
+}
+
+TreeNode* buildTree(vector<int>&inorder, vector<int>&postorder, unordered_map<int, int>&umap,
+                    int postLeft, int postRight,
+                    int inLeft, int inRight) {
+    if (inLeft > inRight || postLeft > postRight)
+        return nullptr;
+    int val = postorder[postRight];
+    int index = umap[val];
+    TreeNode* node = new TreeNode(val);
+    node->left = buildTree(inorder, postorder, umap, postLeft, postLeft+index-inLeft-1, inLeft, index-1);
+    node->right = buildTree(inorder, postorder, umap, postLeft+index-inLeft,postRight-1, index+1,inRight);
+    return node;
+}
