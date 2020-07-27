@@ -88,4 +88,27 @@ bool hasPathSum(TreeNode* root, int sum) {
            hasPathSum(root->right, sum - root->val);
 }
 
+//113. 路径总和 II
+//给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。
+//说明: 叶子节点是指没有子节点的节点。
+
+void dfs(TreeNode* root, vector<int>& tmp, int sum, vector<vector<int>>&res) {
+    if (root == nullptr) return;
+    tmp.push_back(root->val);
+    if (root->val == sum && root->left == nullptr && root->right == nullptr)
+        res.push_back(tmp);
+    if(root->left)
+        dfs(root->left, tmp, sum - root->val, res);
+    if (root->right)
+        dfs(root->right, tmp, sum - root->val, res);
+    tmp.pop_back();
+}
+vector<vector<int>> pathSum(TreeNode* root, int sum) {
+    vector<int> tmp;
+    vector<vector<int>> res;
+    dfs(root, tmp, sum, res);
+    return res;
+}
+
+
 
