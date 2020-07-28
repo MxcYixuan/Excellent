@@ -110,5 +110,35 @@ vector<vector<int>> pathSum(TreeNode* root, int sum) {
     return res;
 }
 
+//116. 填充每个节点的下一个右侧节点指针
+/*给定一个完美二叉树，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}*/
+//填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+//初始状态下，所有 next 指针都被设置为 NULL。
+//方法1：层次遍历迭代法
+Node* connect(Node* root) {
+    if (!root) return nullptr;
+    queue<Node*> que;
+    que.push(root);
+    while(!que.empty()) {
+        int size = que.size();
+        for (int i = 0; i != size; i++) {
+            Node* node = que.front();
+            que.pop();
+            if(node->left) que.push(node->left);
+            if(node->right) que.push(node->right);
+            if(i < size - 1) node->next = que.front();
+        }
+    }
+    return root;
+}
+
+
+
 
 
