@@ -197,4 +197,60 @@ int maxPathSum(TreeNode* root, int &val) {
     return condition2;
 }
 
+//129. 求根到叶子节点数字之和
+/*给定一个二叉树，它的每个结点都存放一个 0-9 的数字，每条从根到叶子节点的路径都代表一个数字。
+例如，从根到叶子节点路径 1->2->3 代表数字 123。
+计算从根到叶子节点生成的所有数字之和。
+说明: 叶子节点是指没有子节点的节点
+示例 1:
+
+输入: [1,2,3]
+    1
+   / \
+  2   3
+输出: 25
+解释:
+从根到叶子节点路径 1->2 代表数字 12.
+从根到叶子节点路径 1->3 代表数字 13.
+因此，数字总和 = 12 + 13 = 25.
+*/
+
+int sumNumbers(TreeNode* root) {
+    //方法1：广度优先遍历
+    if(!root) return 0;
+    int ans = 0;
+    queue<TreeNode*> que;
+    que.push(root);
+    while(!que.empty()) {
+        int size = que.size();
+        for (int i = 0; i != size; i++) {
+            TreeNode* node = que.front();
+            que.pop();
+            if (!node->left && !node->right) ans += node->val;
+            if (node->left) {
+                node->left->val = 10 * node->val + node->left->val;
+                que.push(node->left);
+            }
+            if (node->right) {
+                node->right->val = 10 * node->val + node->right->val;
+                que.push(node->right);
+            }
+        }
+    }
+    return ans;
+}
+
+
+//方法2：递归
+int dfs(TreeNode* root, int sum) {
+    if(!root) return 0;
+    if (!root->left && !root->right)
+        return 10 * sum + root->val;
+    return dfs(root->left, 10 * sum + root->val) +
+           dfs(root->right, 10 * sum + root->val);
+}
+
+int sumNumbers(TreeNode* root) {
+    return dfs(root, 0);
+}
 
