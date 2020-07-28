@@ -137,8 +137,64 @@ Node* connect(Node* root) {
     }
     return root;
 }
+//方法2：递归
+Node* connect(Node* root) {
+    if (!root || !root->left)
+        return root;
+    root->left->next = root->right;
+    if (root->next)
+        root->right->next = root->next->left;
+    root->left = connect(root->left);
+    root->right = connect(root->right);
+    return root;
+
+}
 
 
+//给定一个非空二叉树，返回其最大路径和。
+//本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径至少包含一个节点，且不一定经过根节点。
+示例 1:
+输入: [1,2,3]
 
+       1
+      / \
+     2   3
+输出: 6
+示例 2:
+
+输入: [-10,9,20,null,null,15,7]
+
+   -10
+   / \
+  9  20
+    /  \
+   15   7
+
+输出: 42
+
+       
+int maxPathSum(TreeNode* root) {
+    int val = INT_MIN;
+    maxPathSum2(root, val);
+    return val;
+}
+int maxPathSum2(TreeNode* root, int &val) {
+    if (root == nullptr) return 0;
+    int left = max(0, maxPathSum2(root->left, val));
+    int right = max(0, maxPathSum2(root->right, val));
+    val = max(val, (left + right + root->val));
+    return max(left, right) + root->val;
+}
+
+int maxPathSum(TreeNode* root, int &val) {
+    if (root == NULL) return 0;
+    int left = maxPathSum(root->left, val);
+    int right = maxPathSum(root->right, val);
+    int condition1 = root->val + max(0, left) + max(0, right);
+    int condition2 = root->val + max(0, max(left, right));
+    val = max(val, max(condition1, condition2));
+    // 返回经过root的单边最大分支给上游
+    return condition2;
+}
 
 
