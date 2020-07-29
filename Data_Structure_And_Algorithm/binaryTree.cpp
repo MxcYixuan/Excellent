@@ -299,3 +299,50 @@ int sumNumbers(TreeNode* root) {
     return dfs(root, 0);
 }
 
+//156. 上下翻转二叉树
+//给定一个二叉树，其中所有的右节点要么是具有兄弟节点（拥有相同父节点的左节点）的叶节点，要么为空，
+//将此二叉树上下翻转并将它变成一棵树， 原来的右节点将转换成左叶节点。返回新的根。
+//右节点要么是具有兄弟节点的叶节点，要么为空--这句话的意思是：
+
+/*存在右节点的条件：左节点存在 && 右节点为叶子节点
+由上述可以得出结论，右节点肯定不存在子节点 and 左节点为空，右节点也不存在
+        所以解题方法，可以通过先到左节点尽头，则它为新的根节点，将右节点转为左节点，根节点转为右节点
+*/
+//方法1：递归法
+TreeNode* upsideDownBinaryTree2(TreeNode* root) {
+    if (!root || !root->left) return root;
+    TreeNode* l = root->left;
+    TreeNode* r = root->right;
+
+    root->left = nullptr, root->right = nullptr;
+    TreeNode* node = upsideDownBinaryTree(l);
+
+    l->left = r;
+    l->right = root;
+    return node;
+}
+
+//方法2：迭代法
+TreeNode* upsideDownBinaryTree(TreeNode* root) {
+    stack<TreeNode*> s;
+    if(!root)   return NULL;//判空
+    while(root){//将根结点依次入栈
+        s.push(root);
+        root = root -> left;
+    }
+    TreeNode* ans = s.top();//记录返回的根节点
+    while(!s.empty()){
+        TreeNode* temp = s.top();
+        //cout<<temp->val<<endl;
+        s.pop();//将遍历到的结点出栈
+        temp -> left = NULL, temp -> right = NULL;//如果不将指针置为NULL，会报                                                                   heap-use-after-free
+        if(s.empty()) break;
+        temp -> right = s.top();//左孩子就是新的栈顶
+        if(s.top() -> right){//如果栈顶有右孩子，那么是新树的左孩子
+            temp -> left = s.top() -> right;
+        }
+    }
+    return ans;
+}
+
+
