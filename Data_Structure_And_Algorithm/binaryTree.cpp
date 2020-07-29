@@ -1,3 +1,48 @@
+//144. 二叉树的前序遍历
+vector<int> res;
+    vector<int> preorderTraversal(TreeNode* root) {
+        if(root != nullptr) {
+            res.push_back(root->val);
+            preorderTraversal(root->left);
+            preorderTraversal(root->right);
+        }
+        return res;
+}
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> res;
+    stack<TreeNode*> s;
+    TreeNode* curr = root;
+    while(curr || !s.empty()) {
+        while(curr) {
+            s.push(curr);
+            res.push_back(curr->val);
+            curr = curr->left;
+        }
+        curr = s.top();
+        s.pop();
+        curr = curr->right;
+    }
+    return res;
+}
+//145. 二叉树的后序遍历
+//给定一个二叉树，返回它的 后序 遍历。
+vector<int> postorderTraversal(TreeNode* root) {
+    vector<int> res;
+    if(root == nullptr) return res;
+    stack<TreeNode*> s;
+    s.push(root);
+    while(s.size()){
+        root = s.top();
+        s.pop();
+        if(root->left) s.push(root->left);
+        if(root->right) s.push(root->right);
+        res.push_back(root->val);
+    }
+    reverse(res.begin(),res.end());
+    return res;
+}
+
+
 //面试题 04.03. 特定深度节点链表
 //给定一棵二叉树，设计一个算法，创建含有某一深度上所有节点的链表
 //（比如，若一棵树的深度为 D，则会创建出 D 个链表）。返回一个包含所有深度的链表的数组
