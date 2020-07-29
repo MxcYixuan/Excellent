@@ -344,5 +344,55 @@ TreeNode* upsideDownBinaryTree(TreeNode* root) {
     }
     return ans;
 }
+//199. 二叉树的右视图
+给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+示例:
+
+输入: [1,2,3,null,5,null,4]
+输出: [1, 3, 4]
+解释:
+
+   1            <---
+ /   \
+2     3         <---
+ \     \
+  5     4       <---
+
+//方法1：迭代法
+vector<int> rightSideView2(TreeNode* root) {
+    //BFS搜索
+    vector<int> res;
+    if (root == NULL) return res;
+    queue<TreeNode*> que;
+    que.push(root);
+    while(!que.empty()) {
+        int len = que.size();
+        for (int i = 0; i != len; i++) {
+            TreeNode* curr = que.front();
+            que.pop();
+            if (i == len - 1) res.push_back(curr->val);
+            if (curr->left) que.push(curr->left);
+            if (curr->right) que.push(curr->right);
+        }
+    }
+    return res;
+
+}
+//方法2：递归法
+vector<int> res;
+vector<int> rightSideView(TreeNode* root) {
+    // dfs搜索
+    if (root == nullptr) return res;
+    dfs(root, 0);
+    return res;
+}
+
+void dfs(TreeNode* root, int depth) {
+    if (root == nullptr) return ;
+    if (res.size() == depth)
+        res.push_back(root->val);
+    if (root->right) dfs(root->right, depth + 1);
+    if (root->left) dfs(root->left, depth + 1);
+}
 
 
