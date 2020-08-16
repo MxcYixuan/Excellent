@@ -71,3 +71,108 @@ int coinChange(vector<int>& coins, int amount) {
         return -1;
     return dp[amount];
 }
+
+//494. 目标和
+给定一个非负整数数组，a1, a2, ..., an, 和一个目标数，S。现在你有两个符号 + 和 -。对于数组中的任意一个整数，你都可以从 + 或 -中选择一个符号添加在前面。
+返回可以使最终数组和为目标数 S 的所有添加符号的方法数。
+解题来源：https://labuladong.gitbook.io/algo/dong-tai-gui-hua-xi-lie/targetsum
+//方法1，回溯法，超时
+/* 回溯算法模板 */ //超时了
+void backtrack(vector<int>&nums, int i, int rest) {
+    // base case
+    if (i == nums.size()) {
+        if (rest == 0) {
+            // 说明恰好凑出 target
+            result++;
+        }
+        return;
+    }
+    // 给 nums[i] 选择 - 号
+    rest += nums[i];
+    // 穷举 nums[i + 1]
+    backtrack(nums, i + 1, rest);
+    // 撤销选择
+    rest -= nums[i];
+
+    // 给 nums[i] 选择 + 号
+    rest -= nums[i];
+    // 穷举 nums[i + 1]
+    backtrack(nums, i + 1, rest);
+    // 撤销选择
+    rest += nums[i];
+}
+
+//方法2: 采用dp 备忘录解决重复问题
+unordered_map<string, int> umap;
+int findTargetSumWays3(vector<int>&nums, int target) {
+    if (nums.size() == 0) return 0;
+    return dp(nums, 0, target);
+    return result;
+}
+int dp(vector<int>&nums, int i, long long rest) {
+    // base case
+    if (i == nums.size()) {
+        if (rest == 0) return 1;
+        return 0;
+    }
+    string key =to_string(i) + ":" + to_string(rest);
+    if (umap.count(key))
+        return umap[key];
+    int result = dp(nums, i + 1, rest - nums[i]) + dp(nums, i + 1, rest + nums[i]);
+    umap[key] = result;
+    return result;
+}
+
+//方法3：/动态规划，转为子集合划分问题，而子集合划分问题就是典型的背包问题。
+//如果我们把 nums 划分成两个子集 A 和 B，分别代表分配 + 的数和分配 - 的数，那么他们和 target 存在如下关系：
+//sum（A）- sum(B) = target
+//sum(A) = target + sum(B)
+//sum(A) + sum(A) = target + sum(A) + sum(B)
+//sum(A) = (target + sum(nums)) / 2
+int findTargetSumWays(vector<int>&nums, int target) {
+    int sum = 0;
+    for (int n : nums) sum += n;
+    // 这两种情况，不可能存在合法的子集划分
+    if (sum < target || (sum + target) % 2 == 1) {
+        return 0;
+    }
+    return subsets(nums, (sum + target) / 2);
+}
+int subsets(vector<int> &nums, int sum) {
+    int n = nums.size();
+    vector<vector<int>> dp(n + 1, vector<int>(sum + 1, 0));
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = 1;
+    }
+    for (int i = 1; i <= n; i++) {
+        for(int j = 0; j <= sum; j++) {
+            if (j >= nums[i - 1]) {
+                dp[i][j] = dp[i - 1][j] + dp[i - 1][j - nums[i - 1]];
+            } else {
+                dp[i][j] = dp[i - 1][j];
+            }
+            //cout << dp[i][j] << endl;
+        }
+    }
+    return dp[n][sum];
+}
+
+//方法4：动态规划降维，终极版
+int subsets(vector<int> &nums, int sum) {
+    int n = nums.size();
+    vector<int> dp(sum + 1, 0);
+    dp[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        for(int j = sum; j >= 0; j--) {
+            if (j >= nums[i - 1]) {
+                dp[j] = dp[j] + dp[j - nums[i - 1]];
+            } else {
+                dp[j] = dp[j];
+            }
+            //cout << dp[i][j] << endl;
+        }
+    }
+    return dp[sum];
+}
+
+
