@@ -209,4 +209,25 @@ string longestPalindrome(string s) {
     return s.substr(start, end - start + 1);
 }
 //方法2：动态规划法
+string longestPalindrome(string s) {
+    int n = s.size();
+    vector<vector<bool>> dp(n, vector<bool>(n));
+    string ans;
 
+    for (int len = 0; len < n; len++) {
+        for (int i = 0; i + len < n; i++) {
+            int j = i + len;
+            if (0 == len) {
+                dp[i][j] = true;
+            } else if (1 == len) {
+                dp[i][j] = (s[i] == s[j]);
+            } else {
+                dp[i][j] = (s[i] == s[j] && dp[i + 1][j - 1]);
+            }
+            if (dp[i][j] && len + 1 > ans.size()) {
+                ans = s.substr(i, len + 1);
+            }
+        }
+    }
+    return ans;
+}
