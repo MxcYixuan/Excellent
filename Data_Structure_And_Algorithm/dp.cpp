@@ -231,3 +231,56 @@ string longestPalindrome(string s) {
     }
     return ans;
 }
+//509. 斐波那契数
+/*斐波那契数，通常用 F(n) 表示，形成的序列称为斐波那契数列。该数列由 0 和 1 开始，后面的每一项数字都是前面两项数字的和。也就是：
+F(0) = 0,   F(1) = 1
+F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
+给定 N，计算 F(N)。
+*/
+//方法1：递归方法
+int fib2(int N) {
+    if (N == 1 || N == 2) return 1;
+    return fib(N - 1) + fib(N - 2);
+}
+//方法2：带备忘录的递归解法
+int fib3(int N) {
+    if (N < 1) return 0;
+    vector<int> mem(N + 1, 0);
+    return helper(mem, N);
+}
+int helper(vector<int>& mem, int N) {
+    //base case
+    if (N == 1 || N == 2) return 1;
+    //计算过的
+    if (mem[N]) return mem[N];
+    mem[N] = helper(mem, N - 1) + helper(mem, N - 2);
+    return mem[N];
+}
+//方法3：dp数组的迭代解法
+//我们可以把这个「备忘录」独立出来成为一张表，就叫做 DP table 吧，
+//在这张表上完成「自底向上」的推算
+int fib4(int N) {
+    if (N < 1) return 0;
+    if (N == 1 || N == 2) return 1;
+    vector<int>dp(N + 1, 0);
+    dp[1] = dp[2] = 1;
+    for (int i = 3; i <= N; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[N];
+}
+//方法4：dp数组的迭代解法,去除dp数组，降低空间复杂度
+//我们可以把这个「备忘录」独立出来成为一张表，就叫做 DP table 吧，
+//在这张表上完成「自底向上」的推算
+int fib(int N) {
+    if (N < 1) return 0;
+    if (N == 1 || N == 2) return 1;
+    int pre = 1, cur = 1, sum = 0;
+    for (int i = 3; i <= N; i++) {
+        sum = pre + cur;
+        pre = cur;
+        cur = sum;
+    }
+    return sum;
+}
+
