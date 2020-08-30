@@ -309,6 +309,41 @@ int coinChange(int idx, vector<int>& coins, int amount) {
     }
     return -1;
 }
-int coinChange(vector<int>& coins, int amount) {
+int coinChange2(vector<int>& coins, int amount) {
     return coinChange(0, coins, amount);
+}
+//方法二、动态规划-自上而下 [通过]
+vector<int> count;
+int coinChange3(vector<int>& coins, int amount) {
+    if (amount < 1) return 0;
+    count.resize(amount);
+    return dp(coins, amount);
+}
+int dp(vector<int>& coins, int rem) {
+    if (rem < 0) return -1;
+    if (rem == 0) return 0;
+    if (count[rem - 1]) return count[rem - 1];
+    int Min = INT_MAX;
+    for (int coin : coins) {
+        int res = dp(coins, rem - coin);
+        if (res >= 0 && res < Min) {
+            Min = res + 1;
+        }
+    }
+    count[rem - 1] = Min == INT_MAX ? -1 : Min;
+    return count[rem - 1];
+
+}
+//方法三、动态规划：自下而上 [通过]
+int coinChange(vector<int>& coins, int amount) {
+    vector<int> dp(amount + 1, amount + 1);
+    dp[0] = 0;
+    for (int i = 1; i <= amount; i++) {
+        for (int j = 0; j < coins.size(); ++j) {
+            if (i >= coins[j]) {
+                dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+            }
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
 }
