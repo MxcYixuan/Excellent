@@ -347,3 +347,62 @@ int coinChange(vector<int>& coins, int amount) {
     }
     return dp[amount] > amount ? -1 : dp[amount];
 }
+
+//300. 最长上升子序列
+给定一个无序的整数数组，找到其中最长上升子序列的长度。
+示例:
+输入: [10,9,2,5,3,7,101,18]
+输出: 4 
+解释: 最长的上升子序列是 [2,3,7,101]，它的长度是 4。
+
+//方法1: 动态规划
+//状态转移方程：dp[i]=max(dp[j])+1,其中0≤j<i且num[j]<num[i]
+int lengthOfLIS2(vector<int>& nums) {
+    //定义dp[i]为以 nums[i]结尾的最长上升子序列的长度
+    int n = nums.size();
+    if (n <= 1) return n;
+    vector<int>dp(n, 1);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[i] > nums[j]) {
+                dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+    int res = 0;
+    for (int i = 0; i < dp.size(); i++) {
+        res = max(res, dp[i]);
+    }
+    return res;
+}
+
+//方法2：二分查找
+//纸牌游戏思路
+
+int lengthOfLIS(vector<int>& nums) {
+    vector<int> top(nums.size(), 0);
+    //牌堆的数量
+    int piles_num = 0;
+    for (int i = 0; i != nums.size(); i++) {
+        //要处理的poker
+        int poker = nums[i];
+        int left = 0, right = piles_num;
+        //搜索左侧边界的二分查找
+        while(left < right) {
+            int mid = (left + right) / 2;
+            if (top[mid] > poker) {
+                right = mid;
+            } else if (top[mid] < poker) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+         //while 循环处理完
+        }
+        //如果找不到合适的牌堆，新建牌堆
+        if(left == piles_num) piles_num++;
+        top[left] = poker;
+    }
+    return piles_num;
+}
+
