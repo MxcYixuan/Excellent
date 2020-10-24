@@ -406,3 +406,48 @@ int lengthOfLIS(vector<int>& nums) {
     return piles_num;
 }
 
+//53. 最大子序和
+/*给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+示例:
+输入: [-2,1,-3,4,-1,2,1,-5,4]
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+*/
+
+//方法1：动态规划，
+//以dp[i]表示已nums[i]结尾的最大和连续子数组，那么可以求出每个dp[i] = max(nums[i] + dp[i - 1], nums[i])
+//所以dp[i]中取其大者即可
+//时间复杂度O(N),空间复杂度O(N)
+int maxSubArray2(vector<int>& nums) {
+    int n = nums.size();
+    if (n == 0) return 0;
+    vector<int> dp(n, 0);
+    dp[0] = nums[0];
+    for (int i = 1; i != n; i++) {
+        dp[i] = max(nums[i], dp[i - 1] + nums[i]);
+    }
+
+    int res = INT_MIN;
+    for (int i = 0; i != n; i++) {
+        res = max(dp[i], res);
+    }
+    return res;
+}
+
+//方法2：动态规划
+//因为迭代公式中，dp[i]仅与dp[i - 1]相关，所以可以用两个变量进行替换。
+//dp0为初始值，更新dp1；然后将dp0 = dp1,
+int maxSubArray(vector<int>& nums) {
+    int n = nums.size();
+    if (n == 0) return 0;
+    int dp0 = nums[0];
+    int dp1 = 0
+    int res = dp0;
+
+    for (int i = 1; i != n; i++) {
+        dp1 = max(nums[i], dp0 + nums[i]);
+        dp0 = dp1;
+        res = max(res, dp1);
+    }
+    return res;
+}
