@@ -451,3 +451,73 @@ int maxSubArray(vector<int>& nums) {
     }
     return res;
 }
+
+//416. 分割等和子集
+/*
+给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+注意:
+每个数组中的元素不会超过 100
+数组的大小不会超过 200
+示例 1:
+输入: [1, 5, 11, 5]
+输出: true
+解释: 数组可以分割成 [1, 5, 5] 和 [11].
+*/
+//方法1：动态规划，本质上背包问题
+//那么对于这个问题，我们可以先对集合求和，得出 sum，把问题转化为背包问题：
+//给一个可装载重量为 sum / 2 的背包和 N 个物品，每个物品的重量为 nums[i]。现在让你装物品，是否存在一种装法，能够恰好将背包装满？
+bool canPartition2(vector<int>& nums) {
+    int sum = 0;
+    for (int num : nums) {
+        sum += num;
+    }
+    if (sum % 2 != 0) return false;
+    sum = sum / 2;
+    int n = nums.size();
+    vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1, false));
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = true;
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= sum; j++) {
+            if (j - nums[i - 1] < 0) {
+                //背包容量不够，不能装入第i个物品
+                dp[i][j] = dp[i - 1][j];
+            } else {
+                dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
+            }
+        }
+    }
+
+    return dp[n][sum];
+}
+//方法2：动态规划，进行状态压缩
+//再进一步，是否可以优化这个代码呢？注意到 dp[i][j] 都是通过上一行 dp[i-1][..] 转移过来的，之前的数据都不会再使用了。
+//这就是状态压缩，其实这段代码和之前的解法思路完全相同，只在一行 dp 数组上操作，i 每进行一轮迭代，dp[j] 其实就相当于 dp[i-1][j]，所以只需要一维数组就够用了。
+//唯一需要注意的是 j 应该从后往前反向遍历，因为每个物品（或者说数字）只能用一次，以免之前的结果影响其他的结果。
+//至此，子集切割的问题就完全解决了，时间复杂度 O(n*sum)，空间复杂度 O(sum)。
+bool canPartition(vector<int>& nums) {
+    int sum = 0;
+    for (int num : nums) {
+        sum += num;
+    }
+    if (sum % 2 != 0) return false;
+    sum = sum / 2;
+    int n = nums.size();
+    vector<bool> dp(sum + 1, false);
+    //base case
+    dp[0] = true;
+    for (int i = 0; i < n; i++) {
+        for (int j = sum; j >= 0; j--) {
+            if (j - nums[i] >= 0) {
+                dp[j] = dp[j] || dp[j - nums[i]];
+            }
+        }
+
+    }
+    return dp[sum];
+}
+
+
+
+
