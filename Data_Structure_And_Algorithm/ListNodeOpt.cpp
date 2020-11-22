@@ -193,3 +193,68 @@ ListNode* reverseKGroup(ListNode* head, int k) {
     }
     return dump->next;
 }
+
+// 234. 回文链表
+/*请判断一个链表是否为回文链表。
+示例 1:
+输入: 1->2
+输出: false
+示例 2:
+输入: 1->2->2->1
+输出: true
+***/
+ListNode* left;
+bool traverse(ListNode* right) {
+    if (right == nullptr) return true;
+    bool res = traverse(right->next);
+    // 后序遍历代码
+    res = res && (right->val == left->val);
+    left = left->next;
+    return res;
+}
+// 该方法的核心逻辑是：实际上就是把链表节点放入一个栈，
+// 然后再拿出来，这时候元素顺序就是反的，只不过我们利用的是递归函数的堆栈而已。
+// 方法的时间和空间复杂度都为O(N)
+bool isPalindrome2(ListNode* head) {
+    left = head;
+    return traverse(head);
+}
+// 方法2：通过双指针技巧
+bool isPalindrome(ListNode* head) {
+    if (!head || !head->next) return true;
+    ListNode* slow, *fast;
+    slow = fast = head;
+    while(fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    // 如果链表个数为奇数，则fast指向最后一个元素
+    // 如果链表个数为偶数，则fast指向NULL
+    if (fast != nullptr) {
+        slow = slow->next;
+    }
+    // 以下从slow 开始反转后面的链表，就可以比较回文串了
+    ListNode* left = head;
+    ListNode* right = reverse(slow);
+    while(right) {
+        if (left->val != right->val)
+            return false;
+        left = left->next;
+        right = right->next;
+    }
+    return true;
+}
+ListNode* reverse(ListNode* head) {
+    ListNode* pre = nullptr;
+    ListNode* curr = head;
+    ListNode* next = head;
+    while (curr != nullptr) {
+        next = curr->next;
+        curr->next = pre;
+        pre = curr;
+        curr = next;
+    }
+    return pre;
+}
+
+
