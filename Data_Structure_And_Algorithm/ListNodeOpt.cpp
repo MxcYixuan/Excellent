@@ -52,6 +52,8 @@ ListNode* reverseBetween(ListNode* head, int m, int n) {
     return head;
 }
 
+//206. 反转链表
+//反转一个单链表。
 //方法：迭代解法
 ListNode* reverseList(ListNode* head) {
     if (!head || !head->next) return head;
@@ -65,4 +67,28 @@ ListNode* reverseList(ListNode* head) {
         curr = next;
     }
     return pre;
+}
+//92. 反转链表 II
+//反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+// 以下是循环迭代解法，非常巧妙，非常经典，需要理解其精髓
+ListNode* reverseBetween(ListNode* head, int m, int n) {
+    if (!head || !head->next) return head;
+    ListNode* dump = new ListNode(-1);
+    ListNode* pre = dump;
+    dump->next = head;
+
+    // 首先找到pre节点
+    for(int i = 0; i < m - 1; i++) {
+        pre = pre->next;
+    }
+    // 定义循环迭代中 curr和next节点，非常重要
+    ListNode* curr = pre->next;
+    ListNode* next = curr;
+    for (int i = m; i < n; i++) { //这里非常巧妙的完成循环迭代，你品，你细品
+        next = curr->next;
+        curr->next = next->next;
+        next->next = pre->next;
+        pre->next = next;
+    }
+    return dump->next;
 }
