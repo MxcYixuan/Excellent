@@ -51,3 +51,18 @@ ListNode* reverseBetween(ListNode* head, int m, int n) {
     head->next = reverseBetween(head->next, m - 1, n - 1);
     return head;
 }
+
+//方法：迭代解法
+ListNode* reverseList(ListNode* head) {
+    if (!head || !head->next) return head;
+    ListNode* curr = head;
+    ListNode* next = head;
+    ListNode* pre = nullptr;
+    while(curr) {
+        next = curr->next;
+        curr->next = pre;
+        pre = curr;
+        curr = next;
+    }
+    return pre;
+}
