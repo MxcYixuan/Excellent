@@ -79,3 +79,30 @@ vector<vector<int>> combine(int n, int k) {
     backtrack(n, k, 1, track);
     return res;
 }
+
+
+// 重复元素的全排列问题，考虑去重
+vector<vector<char>> result;
+void back_tracing(vector<char>& str, vector<char>& path, vector<bool>& used) {
+    if(str.size() == path.size()) {
+        result.push_back(path);
+        return;
+    }
+    for(int i = 0; i < str.size(); i++) {
+        if(used[i] || (i > 0 && str[i] == str[i - 1] && !used[i - 1])) {
+            continue;
+        }
+        path.push_back(str[i]);
+        used[i] = true;
+        back_tracing(str, path, used);
+        path.pop_back();
+        used[i] = false;
+    }
+}
+vector<vector<char>> permute_unique(vector<char>& str) {
+    if(str.empty()) return result;
+    vector<char> path;
+    vector<bool> used(str.size(), false);
+    back_tracing(str, path, used);
+    return result;
+}
